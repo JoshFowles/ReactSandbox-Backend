@@ -9,7 +9,7 @@ var CONNECTION_STRING = "mongodb://localhost:27017/Gremlins-DB";
 var DATABASENAME = "Gremlins-DB";
 var database;
 
-const PORT = 5000;
+const PORT = 5001;
 
 async function connectToDatabase() {
     try {
@@ -36,6 +36,18 @@ function startServer() {
             response.send(gremlins);
         } catch (error) {
             response.status(500).send("Error fetching gremlins: " + error.message);
+        }
+    });
+
+    app.get('/api/Gremlins-DB/User', async (request, response) => {
+        try {
+            if (!database) {
+                throw new Error("Database not connected");
+            }
+            const user = await database.collection("User").find({}).toArray();
+            response.send(user);
+        } catch (error) {
+            response.status(500).send("Error fetching Users: " + error.message);
         }
     });
 
